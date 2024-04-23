@@ -275,7 +275,6 @@ h6 {
   height: 100vh;
   background: url("../img/koome-hero.png") top right no-repeat;
   background-size: cover;
-  background-position: center right;
   position: relative;
 }
 
