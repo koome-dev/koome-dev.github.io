@@ -275,6 +275,7 @@ h6 {
   height: 100vh;
   background: url("../img/koome-hero.png") top right no-repeat;
   background-size: cover;
+  background-position: center right;
   position: relative;
 }
 
@@ -287,7 +288,7 @@ h6 {
 
 #hero:before {
   content: "";
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0);
   position: absolute;
   bottom: 0;
   top: 0;
@@ -343,14 +344,35 @@ h6 {
   #hero h1 {
     font-size: 32px;
     line-height: 36px;
+    padding-left: 0%;
   }
 
   #hero p {
     margin-top: 10px;
     font-size: 20px;
     line-height: 24px;
+    padding-left: 0%;
   }
+  
+ #hero .social-links {
+   padding-left: 0%;
+   margin-top: 30px;
 }
+
+ #hero .social-links a {
+   font-size: 24px;
+   display: inline-block;
+   color: #45505b;
+   line-height: 1;
+   margin-right: 20px;
+   transition: 0.3s;
+}
+
+ #hero .social-links a:hover {
+   color: #0563bb;
+}
+}
+
 
 /*--------------------------------------------------------------
 # Sections General
