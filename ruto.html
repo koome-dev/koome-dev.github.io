@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ruto's Travel Map</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+    />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    />
+    <script src="https://unpkg.com/esri-leaflet@3.0.6/dist/esri-leaflet.js"></script>
+  </head>
+  <body>
+    <div id="map" style="height: 100vh"></div>
+
+    <script>
+      // Initialize the map
+      const map = L.map("map").setView([0, 20], 3); // Adjust center and zoom level
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap contributors",
+      }).addTo(map);
+
+      // Add Esri's dark-themed basemap
+      L.esri.basemapLayer("DarkGray").addTo(map);
+
+      // Load the GeoJSON data dynamically
+      fetch("Ruto_International_Trips_With_Timestamps.geojson")
+        .then((response) => response.json())
+        .then((data) => {
+          const markers = [];
+          data.features.forEach((feature, index) => {
+            const { country, details, time } = feature.properties;
+            const [lng, lat] = feature.geometry.coordinates;
+
+            const marker = L.marker([lat, lng]).bindPopup(
+              `<strong>${country}</strong><br>${details}<br>${time}`
+            );
+
+            setTimeout(() => {
+              marker.addTo(map).openPopup();
+            }, index * 2000); // Animate every 2 seconds
+
+            markers.push(marker);
+          });
+        })
+        .catch((error) => console.error("Error loading GeoJSON:", error));
+    </script>
+  </body>
+</html>
