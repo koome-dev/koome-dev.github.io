@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nairobi Bar Density</title>
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.30/esri/themes/dark/main.css"
+    />
+    <script src="https://unpkg.com/@turf/turf/turf.min.js"></script>
+    <script src="https://js.arcgis.com/4.30/"></script>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="viewDiv"></div>
+
+    <script>
+      require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/Graphic",
+        "esri/layers/GraphicsLayer",
+        "esri/geometry/Polygon",
+        "esri/geometry/support/webMercatorUtils",
+      ], function (
+        Map,
+        MapView,
+        Graphic,
+        GraphicsLayer,
+        Polygon,
+        webMercatorUtils
+      ) {
+        // Set up map and view
+        const map = new Map({
+          basemap: "dark-gray-vector",
+        });
+
+        const view = new MapView({
+          container: "viewDiv",
+          map: map,
+          center: [36.82, -1.29], // Nairobi's approximate center
+          zoom: 10,
+        });
+
+        const hexLayer = new GraphicsLayer();
+        map.add(hexLayer);
+
+        // Load the Nairobi boundary GeoJSON file
+        fetch("nairobi.geojson")
+          .then((response) => response.json())
+          .then((nairobiBoundaryData) => {
+            // Use the boundary polygon directly as the mask
+            const nairobiBoundaryPolygon = nairobiBoundaryData.features[0];
+
+            // Define the bounding box around Nairobi
+            const bbox = turf.bbox(nairobiBoundaryPolygon);
+
+            // Generate hexagonal grid within bounding box, constrained by the Berlin boundary
+            const hexGrid = turf.hexGrid(bbox, 0.5, {
+              units: "kilometers",
+              mask: nairobiBoundaryPolygon,
+            });
+
+            // Render the Nairobi boundary on the map
+            const boundaryPolygon = new Polygon({
+              rings: nairobiBoundaryPolygon.geometry.coordinates,
+              spatialReference: { wkid: 3857 },
+            });
+
+            const boundaryGraphic = new Graphic({
+              geometry:
+                webMercatorUtils.geographicToWebMercator(boundaryPolygon),
+              symbol: {
+                type: "simple-line", // Line symbol for the boundary
+                color: [0, 255, 255, 0.6], // Light cyan with some transparency
+                width: 2,
+              },
+            });
+            hexLayer.add(boundaryGraphic);
+
+            // Fetch cafes data from Overpass API
+            fetch(
+              'https://overpass-api.de/api/interpreter?data=[out:json];area[name="Nairobi"]->.searchArea;node["amenity"="bar"](area.searchArea);out;'
+            )
+              .then((response) => response.json())
+              .then((barData) => {
+                const bars = barData.elements.map((bar) => {
+                  return turf.point([bar.lon, bar.lat]);
+                });
+
+                // Count cafes within each hexagon
+                hexGrid.features.forEach((hex) => {
+                  let count = 0;
+                  bars.forEach((bar) => {
+                    if (turf.booleanPointInPolygon(bar, hex)) {
+                      count++;
+                    }
+                  });
+                  hex.properties.count = count;
+                });
+
+                // Render hexagons on the map
+                hexGrid.features.forEach((hex) => {
+                  const color = getColor(hex.properties.count);
+                  const polygon = new Polygon({
+                    rings: hex.geometry.coordinates,
+                    spatialReference: { wkid: 3857 },
+                  });
+                  const hexGraphic = new Graphic({
+                    geometry: webMercatorUtils.geographicToWebMercator(polygon),
+                    symbol: {
+                      type: "simple-fill",
+                      color: color,
+                      outline: { color: [0, 0, 0, 0.5], width: 0 },
+                    },
+                    attributes: hex.properties,
+                    popupTemplate: {
+                      title: "Bar Density",
+                      content: `Bars in this area: ${hex.properties.count}`,
+                    },
+                  });
+                  hexLayer.add(hexGraphic);
+                });
+                // Calculate the extent of all hexagons in the hexLayer
+                let fullExtent = null;
+                hexLayer.graphics.forEach((graphic) => {
+                  if (graphic.geometry) {
+                    if (!fullExtent) {
+                      fullExtent = graphic.geometry.extent.clone();
+                    } else {
+                      fullExtent = fullExtent.union(graphic.geometry.extent);
+                    }
+                  }
+                });
+
+                // Zoom to the calculated extent
+                if (fullExtent) {
+                  view.goTo(fullExtent); // Optional padding
+                }
+              })
+              .catch((error) =>
+                console.error("Error loading café data:", error)
+              );
+
+            // Function to determine color based on café density
+            function getColor(count) {
+              if (count > 15) return [0, 255, 255, 0.8];
+              if (count > 10) return [0, 204, 204, 0.7];
+              if (count > 5) return [0, 153, 153, 0.6];
+              if (count > 0) return [0, 102, 102, 0.5];
+              return [0, 51, 51, 0.3];
+            }
+          })
+          .catch((error) =>
+            console.error("Error loading Nairobi boundary data:", error)
+          );
+      });
+    </script>
+  </body>
+</html>
