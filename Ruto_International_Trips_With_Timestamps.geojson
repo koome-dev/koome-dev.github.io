@@ -53,6 +53,90 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
+        "coordinates": [39.3, -6.8]
+      },
+      "properties": {
+        "country": "Tanzania",
+        "details": "State visit",
+        "time": "2022-10-10"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [34, 28]
+      },
+      "properties": {
+        "country": "Egypt",
+        "details": "Attended United Nations Climate Change Conference",
+        "time": "2022-11-07"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.3, -4.3]
+      },
+      "properties": {
+        "country": "Democratic republic of Congo",
+        "details": "State visit- to discuss the manadate of EACRF in the DRC against the M23 offensive",
+        "time": "2022-11-21"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [127, 37.6]
+      },
+      "properties": {
+        "country": "South-Korea",
+        "details": "State visit- to strengthen cooperation in ICT, education, pharmaceutical and infrastructure",
+        "time": "2022-11-23"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [38.9, 15.3]
+      },
+      "properties": {
+        "country": "Eritrea",
+        "details": "State visit- to improve bilateral relations and to quash visa requirements for its respective citizens",
+        "time": "2022-12-09"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-77, 38.9]
+      },
+      "properties": {
+        "country": "United States",
+        "details": "Africa leaders summit 2022",
+        "time": "2022-12-14"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.35, 48.9]
+      },
+      "properties": {
+        "country": "France",
+        "details": "State visit- Talks about France involvement in infrastructure projects in Kenya",
+        "time": "2023-01-24"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
         "coordinates": [-14.4524, 14.4974]
       },
       "properties": {
@@ -166,7 +250,55 @@
       "properties": {
         "country": "Israel",
         "details": "State visit for discussions on innovation",
-        "time": "2023-05-20"
+        "time": "2023-05-10"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [28.1, -25.9]
+      },
+      "properties": {
+        "country": "South Africa",
+        "details": "3rd Pan African Parliamentarians Summit",
+        "time": "2023-05-17"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [29.4, -3.36]
+      },
+      "properties": {
+        "country": "Burundi",
+        "details": "21st Extraordinary Summit of EAC heads of state",
+        "time": "2023-05-31"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [28.3, -15.4]
+      },
+      "properties": {
+        "country": "Zambia",
+        "details": "22nd COMESA heads of State and Government Summit",
+        "time": "2023-06-07"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [43.1, 11.6]
+      },
+      "properties": {
+        "country": "Djibouti",
+        "details": "State visit and Ordinary Summit of Intergovernmental Authority on Development",
+        "time": "2023-06-11"
       }
     },
     {
